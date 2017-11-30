@@ -5,6 +5,8 @@ import io.pivotal.pal.tracker.TimeEntryController;
 import io.pivotal.pal.tracker.TimeEntryRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.boot.actuate.metrics.CounterService;
+import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,8 +25,32 @@ public class TimeEntryControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        CounterService counterService = new CounterService() {
+            @Override
+            public void increment(String metricName) {
+
+            }
+
+            @Override
+            public void decrement(String metricName) {
+
+            }
+
+            @Override
+            public void reset(String metricName) {
+
+            }
+        };
+
+        GaugeService gaugeService = new GaugeService() {
+            @Override
+            public void submit(String metricName, double value) {
+
+            }
+        };
+
         timeEntryRepository = mock(TimeEntryRepository.class);
-        controller = new TimeEntryController(timeEntryRepository);
+        controller = new TimeEntryController(timeEntryRepository, counterService, gaugeService);
     }
 
     @Test
